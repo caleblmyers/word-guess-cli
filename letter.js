@@ -18,7 +18,9 @@ Letter.prototype.toString = function () {
 Letter.prototype.check = function (guess) {
     if (guess === this.char) {
         this.isGuessed = true
+        return true
     }
+    return false
 }
 
 module.exports = Letter

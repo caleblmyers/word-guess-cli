@@ -1,6 +1,7 @@
 var Letter = require("./letter.js")
 
 function Word(str) {
+    this.lives = 10
     this.remaining = str.length
     this.charArray = []
     for (let i = 0; i < str.length; i++) {
@@ -13,21 +14,29 @@ Word.prototype.update = function () {
     this.charArray.forEach(function (char) {
         wordDisplay += char
     });
-    
+
     this.remaining = 0
     for (let i = 0; i < wordDisplay.length; i++) {
         if (wordDisplay[i] === "_") {
             this.remaining++
         }
     }
-    console.log(this.remaining)
     return wordDisplay
 }
 
 Word.prototype.makeGuess = function (guess) {
-    this.charArray.forEach(function(char) {
-        char.check(guess)
+    var correct = false
+    this.charArray.forEach(function (char) {
+        if (char.check(guess) === true) {
+            correct = true
+        }
     })
+    
+    if (correct) {
+        console.log("\nCorrect guess!\n")
+    } else {
+        this.lives--
+    }
 }
 
 module.exports = Word
