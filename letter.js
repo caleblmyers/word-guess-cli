@@ -15,8 +15,8 @@ Letter.prototype.toString = function () {
     }
 }
 
-Letter.prototype.check = function (guess) {
-    if (guess === this.char) {
+Letter.prototype.check = function (upper, lower) {
+    if (upper === this.char || lower == this.char) {
         this.isGuessed = true
         return true
     }

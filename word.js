@@ -26,26 +26,14 @@ Word.prototype.update = function () {
 
 Word.prototype.makeGuess = function (guess) {
   var correct = false
-  this.charArray.forEach(function (char) {
-    if (char.check(guess) === true) {
-      correct = true
-    }
-  })
+  var upper = guess.toUpperCase()
+  var lower = guess.toLowerCase()
 
-  var guessUpper = guess.toUpperCase()
   this.charArray.forEach(function (char) {
-    if (char.check(guessUpper) === true) {
+    if (char.check(upper, lower) === true) {
       correct = true
     }
   })
-
-  var guessLower = guess.toLowerCase()
-  this.charArray.forEach(function (char) {
-    if (char.check(guessLower) === true) {
-      correct = true
-    }
-  })
-  
   return correct
 }
 

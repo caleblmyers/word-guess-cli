@@ -4,7 +4,7 @@ var asoiaf = require("api-iceandfire")
 var chalk = require("chalk")
 
 var answer
-var guessList = []
+var guesses = []
 
 function promptGuess() {
   inquirer
@@ -14,10 +14,9 @@ function promptGuess() {
       validate: function (value) {
         if (
           value.length === 1 && 
-          isNaN(value) === true && 
-          guessList.indexOf(value) === -1 && 
-          guessList.indexOf(value.toUpperCase()) === -1 &&
-          guessList.indexOf(value.toLowerCase()) === -1
+          isNaN(value) === true &&
+          value.toUpperCase() != value.toLowerCase() && 
+          guesses.indexOf(value.toLowerCase()) === -1
         ) {
           return true
         }
@@ -25,7 +24,7 @@ function promptGuess() {
       }
     })
     .then(function (res) {
-      guessList.push((res.guess).toLowerCase())
+      guesses.push((res.guess).toLowerCase())
       var correct = answer.makeGuess(res.guess)
 
       if (correct) {
@@ -43,7 +42,7 @@ function promptGuess() {
       if (answer.lives > 0) {
         console.log("\n" + answer.update() + "\n")
         if (answer.remaining > 0) {
-          console.log("Letters guessed: " + guessList.join(", ") + "\n")
+          console.log("Letters guessed: " + guesses.join(", ") + "\n")
           promptGuess()
         } else if (answer.remaining <= 0) {
           console.log("You got the word!\n")
@@ -58,10 +57,8 @@ function promptGuess() {
 }
 
 function newGame() {
-  guessList = []
-
+  guesses = []
   var randIndex = Math.floor(Math.random() * 500 + 100)
-
   asoiaf
     .getCharacter(randIndex)
     .then(function (res) {
@@ -80,18 +77,10 @@ function mainMenu() {
       choices: ["New Game", "Exit"]
     })
     .then(function (res) {
-      switch (res.input) {
-        case "New Game":
-          newGame()
-          break;
-
-        case "Exit":
-          console.log("\nBye for now!")
-          break;
-
-        default:
-          console.log("\nError!")
-          break;
+      if (res.input === "New Game") {
+        newGame()
+      } else {
+        console.log("\nBye for now!")
       }
     })
 }
